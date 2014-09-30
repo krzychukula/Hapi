@@ -22,6 +22,16 @@ server.route({
     }
 });
 
+server.route({
+    method: 'GET',
+    path: '/public/{param*}',
+    handler: {
+        directory: {
+            path: 'public'
+        }
+    }
+});
+
 // Start the server
 server.start();
 
