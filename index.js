@@ -1,8 +1,17 @@
 var Hapi = require('hapi');
 var Good = require('good');
+var Path = require('path');
 
+var serverOptions = {
+    views: {
+        engines: {
+            html: require('handlebars')
+        },
+        path: Path.join(__dirname, 'views')
+    }
+};
 // Create a server with a host and port
-var server = new Hapi.Server(8000);
+var server = new Hapi.Server(8000, serverOptions);
 
 // Add the route
 server.route({
@@ -10,7 +19,7 @@ server.route({
     path: '/',
     handler: function (request, reply) {
 
-        reply('hello world');
+        reply.view('index', { title: 'My home page' });
     }
 });
 
