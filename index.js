@@ -14,6 +14,14 @@ server.route({
 
 server.route({
   method: 'GET',
+  path:'/foo/bar/baz/{path}',
+  handler: {
+    directory: { path: './public' }
+  }
+})
+
+server.route({
+  method: 'GET',
   path: '/{name}',
   handler: function(request, reply){
     reply("Hello " + request.params.name)
