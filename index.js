@@ -13,5 +13,13 @@ server.route({
     }
 });
 
+server.route({
+  method: 'GET',
+  path: '/{name}',
+  handler: function(request, reply){
+    reply("Hello " + request.params.name)
+  }
+})
+
 // Start the server
 server.start();
