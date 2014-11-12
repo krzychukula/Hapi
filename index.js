@@ -4,10 +4,12 @@ var path = require('path')
 // Create a server with a host and port
 var server = Hapi.createServer('localhost', Number(process.argv[2] || 8080));
 
+
 server.views({
   engines: {
     html: require('handlebars')
   },
+  helpersPath: 'helpers',
   path: path.join(__dirname, 'templates')
 })
 
