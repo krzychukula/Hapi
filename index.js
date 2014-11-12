@@ -34,6 +34,17 @@ server.route({
   handler: function(request, reply){
     reply("Hello " + request.params.name)
   }
+});
+
+server.route({
+  method: 'GET',
+  path: '/proxy',
+  handler: {
+    proxy: {
+      host: 'localhost',
+      port: 65535
+    }
+  }
 })
 
 // Start the server
