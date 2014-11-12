@@ -18,8 +18,8 @@
   },
   "homepage": "https://github.com/krzychukula/Hapi",
   "dependencies": {
-    "good": "^2.3.0",
-    "handlebars": "^2.0.0",
-    "hapi": "^6.8.1"
+    "good": "4.0.0",
+    "handlebars": "2.0.0",
+    "hapi": "7.5.2"
   }
 }
