@@ -4,9 +4,28 @@ var fs = require('fs');
 var rot13 = require('rot13-stream')();
 var Joi = require('joi');
 
-// Create a server with a host and port
-var server = Hapi.createServer('localhost', Number(process.argv[2] || 8080));
+var options = {
+  state: {
+    cookies: {
+      parse: true,
+      failAction: 'log',
+      strictHeader: true, // don't allow violations of RFC 6265
+    }
+  }
+}
 
+// Create a server with a host and port
+var server = Hapi.createServer(
+  'localhost',
+  Number(process.argv[2] || 8080),
+  options)
+
+server.state('session', {
+  ttl: 10,
+  encoding: 'base64json',
+  path: '/{path*}',
+  domain: 'localhost',
+})
 
 server.views({
   engines: {
@@ -15,6 +34,30 @@ server.views({
   helpersPath: 'helpers',
   path: path.join(__dirname, 'templates')
 })
+
+server.route({
+  method: 'GET',
+  path: '/set-cookie',
+  handler: function(req, rep){
+    rep('cookies!!!')
+      .state('session', {key : 'makemehapi'})
+
+    console.log(req.state.session)
+  },
+})
+
+server.route({
+  method: 'GET',
+  path: '/check-cookie',
+  handler: function(req, rep){
+    if(req.state.session){
+      rep({user: 'hapi'})
+    }else{
+      rep(new Hapi.error.unauthorized("Missing authentication"))
+    }
+  },
+})
+
 
 server.route({
   method: 'POST',
