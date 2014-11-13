@@ -18,6 +18,36 @@ server.views({
 
 server.route({
   method: 'POST',
+  path: '/upload',
+  handler: function(req, rep){
+    var body = '';
+    req.payload.file.on('data', function(data){
+      body += data;
+    })
+    req.payload.file.on('end', function(){
+      console.log(body);
+      rep({
+        description: req.payload.description,
+        file: {
+          data: body,
+          filename: req.payload.file.hapi.filename,
+          headers: req.payload.file.hapi.headers,
+        }
+      })
+    })
+  },
+  config: {
+    payload: {
+      allow: 'multipart/form-data',
+      output: 'stream',
+      parse: true,
+    }
+
+  }
+})
+
+server.route({
+  method: 'POST',
   path: '/login',
   handler: function(req, rep){ rep('login successful')},
   config: {
