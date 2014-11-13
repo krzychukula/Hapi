@@ -16,6 +16,24 @@ server.views({
   path: path.join(__dirname, 'templates')
 })
 
+server.route({
+  method: 'POST',
+  path: '/login',
+  handler: function(req, rep){ rep('login successful')},
+  config: {
+    validate: {
+      payload: Joi.object({
+         isGuest: Joi.boolean().required(),
+         username: Joi.when('isGuest', { is: false, then: Joi.required() }),
+         password: Joi.string().alphanum(),
+         accessToken: Joi.string().alphanum(),
+      })
+      .options({allowUnknown: true})
+      .without('password', 'accessToken')
+    }
+  }
+})
+
 
 var routeConfig = {
   path: '/chickens/{breed}',
